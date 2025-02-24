@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* styles/globals.css */
+:root {
+  --color-background: #E3F6F5; 
+  --color-card-bg: #FFFFFF;    
+  --color-gray-500: #6B7280;    
+  --color-gray-700: #374151;    
+  --color-blue-600: #2563EB;   
+  --color-black: #000000;      
+  --color-white: #FFFFFF;      
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  background-color: var(--color-background);
+  color: var(--color-gray-700);
+}
+
+a {
+  color: var(--color-blue-600);
+  text-decoration: underline;
+}
+
+button {
+  cursor: pointer;
+}
