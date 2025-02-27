@@ -18,10 +18,40 @@ export default function Login() {
     return null;
   }
 
-  const handleLogin = () => {
-    setError("Demo mode: No backend set up yet!");
+  // const handleLogin = () => {
+  //   setError("Demo mode: No backend set up yet!");
+  // };
+  const handleLogin = async () => {
+    setError(""); // Clear any previous errors
+  
+    // Prepare login data
+    const loginData = {
+      email,
+      password,
+    };
+  
+    try {
+      const response = await fetch("http://127.0.0.1:5000/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(loginData),
+      });
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        // Redirect to the profile page or dashboard after successful login
+        router.push("/profile"); 
+      } else {
+        setError(data.error || "Failed to log in"); // Show error message from backend
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      setError("An error occurred while trying to log in.");
+    }
   };
-
   return (
     <>
       <Head>
