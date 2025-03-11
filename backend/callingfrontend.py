@@ -5,8 +5,8 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 CORS(app)  # Allow cross-origin requests from React frontend
 
-# Configure the database (using SQLite for simplicity)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///nearme.db'  # Use SQLite for local development
+# Configure the database (using mySQL for simplicity)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:root@127.0.0.1/nearme'  # Use mySQL for local development
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Disable modification tracking to save resources
 
 # Initialize SQLAlchemy
