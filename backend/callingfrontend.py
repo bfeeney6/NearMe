@@ -33,7 +33,19 @@ class Events(db.Model):
     interest = db.Column(db.String(200))
     startDate = db.Column(db.DateTime)
     endDate = db.Column(db.DateTime)
-
+    
+class Friend(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    location = db.Column(db.String(255))
+    activity = db.Column(db.String(255))
+    age = db.Column(db.Integer)
+    type = db.Column(db.Enum('group', 'individual'), nullable=False)
+    
+class LocalPost(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    post_text = db.Column(db.Text, nullable=False)
+    posted_at = db.Column(db.DateTime, default=db.func.current_timestamp())
 
 # Create the database tables if they don't exist already
 with app.app_context():
@@ -182,3 +194,102 @@ def delete_event(id):
     db.session.delete(event)
     db.session.commit()
 
+@app.route("/api/friends", methods=["GET"])
+def get_friends():
+    friends = Friend.query.all()
+    return jsonify([{ 
+        "id": friend.id,
+        "name": friend.name,
+        "location": friend.location,
+        "activity": friend.activity,
+        "age": friend.age,
+        "type": friend.type
+    } for friend in friends])
+
+@app.route("/api/friends", methods=["POST"])
+def add_friend():
+    data = request.json
+    required_fields = ["name", "type"]
+    if not all(field in data for field in required_fields):
+        return jsonify({"error": "Missing required fields"}), 400
+
+    new_friend = Friend(
+        name=data["name"],
+        location=data.get("location"),
+        activity=data.get("activity"),
+        age=data.get("age"),
+        type=data["type"]
+    )
+    
+    db.session.add(new_friend)
+    db.session.commit()
+
+    return jsonify({"message": "Friend/Group added successfully!"}), 201
+
+@app.route("/api/friends/<int:id>", methods=["PUT"])
+def update_friend(id):
+    friend = Friend.query.get(id)
+    if not friend:
+        return jsonify({"error": "Friend/Group not found"}), 404
+    
+    data = request.json
+    friend.name = data.get("name", friend.name)
+    friend.location = data.get("location", friend.location)
+    friend.activity = data.get("activity", friend.activity)
+    friend.age = data.get("age", friend.age)
+    friend.type = data.get("type", friend.type)
+    
+    db.session.commit()
+    return jsonify({"message": "Friend/Group updated successfully!"})
+
+@app.route("/api/friends/<int:id>", methods=["DELETE"])
+def delete_friend(id):
+    friend = Friend.query.get(id)
+    if not friend:
+        return jsonify({"error": "Friend/Group not found"}), 404
+    
+    db.session.delete(friend)
+    db.session.commit()
+    return jsonify({"message": "Friend/Group deleted successfully!"})
+
+
+@app.route("/api/local-posts", methods=["GET"])
+def get_local_posts():
+    posts = LocalPost.query.order_by(LocalPost.posted_at.desc()).all()
+    return jsonify([{ 
+        "id": post.id,
+        "post_text": post.post_text,
+        "posted_at": post.posted_at.strftime("%Y-%m-%d %H:%M:%S")
+    } for post in posts])
+
+@app.route("/api/local-posts", methods=["POST"])
+def create_local_post():
+    data = request.json  
+    if "post_text" not in data:
+        return jsonify({"error": "Post text is required"}), 400
+
+    new_post = LocalPost(post_text=data["post_text"])
+    db.session.add(new_post)
+    db.session.commit()
+    return jsonify({"message": "Post created successfully!"}), 201
+
+@app.route("/api/local-posts/<int:id>", methods=["PUT"])
+def update_local_post(id):
+    post = LocalPost.query.get(id)
+    if not post:
+        return jsonify({"error": "Post not found"}), 404
+
+    data = request.json
+    post.post_text = data.get("post_text", post.post_text)
+    db.session.commit()
+    return jsonify({"message": "Post updated successfully!"})
+
+@app.route("/api/local-posts/<int:id>", methods=["DELETE"])
+def delete_local_post(id):
+    post = LocalPost.query.get(id)
+    if not post:
+        return jsonify({"error": "Post not found"}), 404
+    
+    db.session.delete(post)
+    db.session.commit()
+    return jsonify({"message": "Post deleted successfully!"})

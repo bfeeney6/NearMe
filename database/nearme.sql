@@ -36,3 +36,21 @@ CREATE TABLE Events (
     startDate DATE,
     endDate DATE
 );
+
+CREATE TABLE Friends (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    location VARCHAR(255) NOT NULL,
+    activity VARCHAR(255) NOT NULL,
+    age INT CHECK (age >= 0),
+    type ENUM('group', 'individual') NOT NULL
+    -- not sure how ids would really work on this screen
+);
+
+CREATE TABLE LocalPosts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    post_text TEXT NOT NULL, 
+    posted_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    -- picture VARCHAR(255),  not sure if we bother with pictures 
+);
+
