@@ -22,3 +22,17 @@ CREATE TABLE Profile (
     notifications BOOLEAN,
     privacy VARCHAR (50)
 );
+
+CREATE TABLE BusinessOffers (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR (50),
+    offerTime TIMESTAMP
+);
+
+CREATE TABLE Events (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    location VARCHAR (200),
+    interest VARCHAR (200),
+    startDate DATE,
+    endDate DATE
+);
