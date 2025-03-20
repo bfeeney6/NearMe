@@ -46,6 +46,12 @@ CREATE TABLE Friends (
     type ENUM('group', 'individual') NOT NULL
     -- not sure how ids would really work on this screen
 );
+CREATE TABLE Users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL
+);
+
 
 CREATE TABLE LocalPosts (
     id INT AUTO_INCREMENT PRIMARY KEY,

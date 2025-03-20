@@ -18,40 +18,31 @@ export default function Login() {
     return null;
   }
 
-  // const handleLogin = () => {
-  //   setError("Demo mode: No backend set up yet!");
-  // };
   const handleLogin = async () => {
     setError(""); // Clear any previous errors
-  
-    // Prepare login data
-    const loginData = {
-      email,
-      password,
-    };
-  
+
+    const loginData = { email, password };
+
     try {
       const response = await fetch("http://127.0.0.1:5000/api/login", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(loginData),
       });
-  
+
       const data = await response.json();
-  
+
       if (response.ok) {
-        // Redirect to the profile page or dashboard after successful login
-        router.push("/profile"); 
+        router.push("/profile"); // Redirect after successful login
       } else {
-        setError(data.error || "Failed to log in"); // Show error message from backend
+        setError(data.error || "Failed to log in");
       }
     } catch (error) {
       console.error("Error:", error);
       setError("An error occurred while trying to log in.");
     }
   };
+
   return (
     <>
       <Head>
@@ -65,7 +56,10 @@ export default function Login() {
       <main className="bg-[var(--color-background)] min-h-screen flex flex-col items-center px-4 pt-12">
         <div className="w-full max-w-sm">
           <div className="flex justify-between items-center mb-4">
-            <button className="text-[var(--color-gray-500)] text-lg font-semibold border-b-4 border-transparent">
+            <button
+              className="text-[var(--color-gray-500)] text-lg font-semibold border-b-4 border-transparent"
+              onClick={() => router.push("/signup")} // Navigate to signup page
+            >
               Signup
             </button>
             <button className="text-[var(--color-black)] text-lg font-semibold border-b-4 border-[var(--color-black)]">
@@ -128,7 +122,7 @@ export default function Login() {
 
         <p className="mt-4">
           Don’t have an account?{" "}
-          <a href="/signup" className="underline">
+          <a href="/signup" className="underline text-blue-600">
             Sign up
           </a>
         </p>

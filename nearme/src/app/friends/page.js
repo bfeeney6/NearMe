@@ -45,29 +45,55 @@ export default function FriendsPage() {
   );
 }
 
-/*
-   Current Friends & Groups Section
-*/
 function CurrentFriendsSection() {
-  // API
+  const friends = [
+    { id: 1, name: "Alice Johnson", location: "New York", interest: "Hiking" },
+    { id: 2, name: "Michael Smith", location: "Los Angeles", interest: "Photography" },
+  ];
+
   return (
     <div>
       <h2 className="text-xl font-semibold mb-4 text-[var(--color-gray-700)]">
         Current Friends &amp; Groups
       </h2>
-      <p className="text-[var(--color-gray-700)]">
-        {/* Replace with your own list of friends/groups */}
-        You currently have no friends or groups added.
-      </p>
+
+      {friends.length > 0 ? (
+        <ul className="space-y-4">
+          {friends.map((friend) => (
+            <li key={friend.id} className="bg-gray-100 p-4 rounded shadow">
+              <h3 className="font-semibold text-lg">{friend.name}</h3>
+              <p className="text-sm text-gray-600">
+                Location: {friend.location} | Interest: {friend.interest}
+              </p>
+              <button className="mt-2 px-4 py-2 bg-[var(--color-black)] text-[var(--color-white)] rounded transition duration-200 hover:bg-gray-800">
+                View Profile
+              </button>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="text-[var(--color-gray-700)]">You currently have no friends or groups added.</p>
+      )}
     </div>
   );
 }
 
-/*
-   Search for New Friends & Groups Section
-*/
+
 function SearchFriendsSection() {
   const [searchType, setSearchType] = useState("friends");
+  const [searchResults, setSearchResults] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const handleSearch = async () => {
+    setLoading(true);
+    setTimeout(() => {
+      setSearchResults([
+        { id: 1, name: "John Doe", location: "New York", interest: "Hiking" },
+        { id: 2, name: "Jane Smith", location: "New York", interest: "Hiking" },
+      ]);
+      setLoading(false);
+    }, 1000);
+  };
 
   return (
     <div>
@@ -75,92 +101,25 @@ function SearchFriendsSection() {
         Search for New Friends &amp; Groups
       </h2>
 
-      <div className="mb-4">
-        <label className="block text-sm font-semibold mb-1 text-[var(--color-gray-700)]">
-          Name
-        </label>
-        <input
-          type="text"
-          placeholder="Enter name"
-          className="border border-gray-300 rounded p-2 w-full"
-        />
-      </div>
-
-      <div className="mb-4">
-        <label className="block text-sm font-semibold mb-1 text-[var(--color-gray-700)]">
-          Location
-        </label>
-        <input
-          type="text"
-          placeholder="Enter location"
-          className="border border-gray-300 rounded p-2 w-full"
-        />
-      </div>
-
-      <div className="mb-4">
-        <label className="block text-sm font-semibold mb-1 text-[var(--color-gray-700)]">
-          Activity/Interest
-        </label>
-        <input
-          type="text"
-          placeholder="Enter activity or interest"
-          className="border border-gray-300 rounded p-2 w-full"
-        />
-      </div>
-
-      <div className="mb-4">
-        <label className="block text-sm font-semibold mb-1 text-[var(--color-gray-700)]">
-          Age
-        </label>
-        <input
-          type="number"
-          placeholder="Enter age"
-          className="border border-gray-300 rounded p-2 w-full"
-        />
-      </div>
-
-      <div className="mb-4 flex items-center gap-2">
-        <span className="text-sm font-semibold text-[var(--color-gray-700)]">
-          Search for:
-        </span>
-        <button
-          onClick={() => setSearchType("groups")}
-          className={`px-3 py-1 rounded ${
-            searchType === "groups"
-              ? "bg-[var(--color-black)] text-[var(--color-white)]"
-              : "bg-[var(--color-background)] text-[var(--color-gray-700)]"
-          }`}
-        >
-          Groups
-        </button>
-        <button
-          onClick={() => setSearchType("friends")}
-          className={`px-3 py-1 rounded ${
-            searchType === "friends"
-              ? "bg-[var(--color-black)] text-[var(--color-white)]"
-              : "bg-[var(--color-background)] text-[var(--color-gray-700)]"
-          }`}
-        >
-          Friends
-        </button>
-      </div>
-
-      <div className="mb-4">
-        <label className="block text-sm font-semibold mb-1 text-[var(--color-gray-700)]">
-          Upload Photo ID
-        </label>
-        <input
-          type="file"
-          className="border border-gray-300 rounded p-2 w-full"
-        />
-        <p className="text-xs text-gray-500 mt-1">
-          Note: ID must be either driver&apos;s license or passport.
-        </p>
-      </div>
-
-      <button className="w-full py-2 rounded bg-[var(--color-black)] text-[var(--color-white)] font-semibold">
+      <input type="text" placeholder="Enter name" className="border border-gray-300 rounded p-2 w-full mb-4" />
+      <input type="text" placeholder="Enter location" className="border border-gray-300 rounded p-2 w-full mb-4" />
+      <input type="text" placeholder="Enter activity or interest" className="border border-gray-300 rounded p-2 w-full mb-4" />
+      
+      <button onClick={handleSearch} className="w-full py-2 rounded bg-[var(--color-black)] text-[var(--color-white)] font-semibold">
         Search
       </button>
+      
+      {loading && <p className="text-center text-gray-500 mt-4">Searching...</p>}
+
+      <div className="mt-4">
+        {searchResults.map((profile) => (
+          <div key={profile.id} className="p-4 border rounded mb-2">
+            <p className="font-semibold">{profile.name}</p>
+            <p className="text-sm text-gray-600">Location: {profile.location}</p>
+            <p className="text-sm text-gray-600">Interest: {profile.interest}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

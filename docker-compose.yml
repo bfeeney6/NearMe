@@ -2,7 +2,8 @@ version: '3'
 services:
 
   database:
-    build: ./nearmedatabase
+    # build: ./nearmedatabase
+    build: ./database
     restart: always
     container_name: nearmedatabase
     environment:

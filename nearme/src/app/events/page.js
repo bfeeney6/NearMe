@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 export default function EventsPage() {
   const [activeTab, setActiveTab] = useState("search");
   const [events, setEvents] = useState([]);
+  const [searchedEvents, setSearchedEvents] = useState([]); // Store the search results
 
   useEffect(() => {
     async function fetchEvents() {
@@ -13,25 +14,36 @@ export default function EventsPage() {
       const mockData = [
         {
           id: 1,
-          location: "New York",
-          interest: "Music",
+          location: "Lucan",
+          interest: "Soccer",
           startDate: "2024-05-01",
           endDate: "2024-05-01",
         },
         {
           id: 2,
-          location: "Los Angeles",
-          interest: "Sports",
+          location: "Lucan",
+          interest: "Soccer",
           startDate: "2024-05-02",
           endDate: "2024-05-02",
         },
       ];
       await new Promise((res) => setTimeout(res, 500));
-      setEvents(mockData);
+      setEvents(mockData); // Save events to state
     }
 
     fetchEvents();
   }, []);
+
+  // Handle search
+  const handleSearch = (location, interest) => {
+    // Filter events based on search criteria
+    const filteredEvents = events.filter(
+      (event) =>
+        event.location.toLowerCase().includes(location.toLowerCase()) &&
+        event.interest.toLowerCase().includes(interest.toLowerCase())
+    );
+    setSearchedEvents(filteredEvents); // Set the filtered events to display
+  };
 
   return (
     <div className="bg-[var(--color-background)] min-h-screen">
@@ -75,7 +87,7 @@ export default function EventsPage() {
           </button>
         </div>
 
-        {activeTab === "search" && <SearchEventsSection />}
+        {activeTab === "search" && <SearchEventsSection handleSearch={handleSearch} />}
         {activeTab === "manage" && <ManageEventsSection events={events} />}
         {activeTab === "create" && <CreateEventsSection />}
       </div>
@@ -86,7 +98,24 @@ export default function EventsPage() {
 /* 
    Search Section
  */
-function SearchEventsSection() {
+function SearchEventsSection({ handleSearch }) {
+  const [location, setLocation] = useState("");
+  const [interest, setInterest] = useState("");
+
+  const [searchedEvents, setSearchedEvents] = useState([]); // Store search results here
+
+  const handleLocationChange = (e) => {
+    setLocation(e.target.value);
+  };
+
+  const handleInterestChange = (e) => {
+    setInterest(e.target.value);
+  };
+
+  const onSearch = () => {
+    handleSearch(location, interest);
+  };
+
   return (
     <div>
       <h2 className="text-xl font-semibold mb-4 text-[var(--color-gray-700)]">
@@ -99,6 +128,8 @@ function SearchEventsSection() {
         </label>
         <input
           type="text"
+          value={location}
+          onChange={handleLocationChange}
           placeholder="Enter location"
           className="border border-gray-300 rounded p-2 w-full"
         />
@@ -110,6 +141,8 @@ function SearchEventsSection() {
         </label>
         <input
           type="text"
+          value={interest}
+          onChange={handleInterestChange}
           placeholder="Enter activity or interest"
           className="border border-gray-300 rounded p-2 w-full"
         />
@@ -138,9 +171,39 @@ function SearchEventsSection() {
         </div>
       </div>
 
-      <button className="w-full py-2 rounded bg-[var(--color-black)] text-[var(--color-white)] font-semibold">
+      <button
+        onClick={onSearch}
+        className="w-full py-2 rounded bg-[var(--color-black)] text-[var(--color-white)] font-semibold"
+      >
         Search
       </button>
+
+      {/* Display the search results */}
+      {searchedEvents.length > 0 && (
+        <div>
+          <h3 className="mt-6 text-lg font-semibold text-[var(--color-gray-700)]">
+            Upcoming Events
+          </h3>
+          <div className="space-y-4 mt-4">
+            {searchedEvents.map((event) => (
+              <div
+                key={event.id}
+                className="border border-gray-300 rounded p-4 text-[var(--color-gray-700)]"
+              >
+                <div>
+                  <div><strong>Location:</strong> {event.location}</div>
+                  <div><strong>Interest:</strong> {event.interest}</div>
+                  <div><strong>Start Date:</strong> {event.startDate}</div>
+                  <div><strong>End Date:</strong> {event.endDate}</div>
+                </div>
+                <button className="mt-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
+                  Join Event
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -159,19 +222,22 @@ function ManageEventsSection({ events }) {
           {events.map((event) => (
             <li
               key={event.id}
-              className="border border-gray-300 rounded p-3 text-[var(--color-gray-700)]"
+              className="border border-gray-300 rounded p-3 text-[var(--color-gray-700)] flex justify-between items-center"
             >
               <div>
-                <strong>Location:</strong> {event.location}
+                <div><strong>Location:</strong> {event.location}</div>
+                <div><strong>Interest:</strong> {event.interest}</div>
+                <div><strong>Start Date:</strong> {event.startDate}</div>
+                <div><strong>End Date:</strong> {event.endDate}</div>
               </div>
-              <div>
-                <strong>Interest:</strong> {event.interest}
-              </div>
-              <div>
-                <strong>Start Date:</strong> {event.startDate}
-              </div>
-              <div>
-                <strong>End Date:</strong> {event.endDate}
+
+              <div className="flex space-x-2">
+                <button className="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600">
+                  Edit
+                </button>
+                <button className="px-3 py-1 text-sm bg-red-500 text-white rounded hover:bg-red-600">
+                  Delete
+                </button>
               </div>
             </li>
           ))}
