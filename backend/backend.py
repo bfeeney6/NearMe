@@ -16,6 +16,63 @@ def get_db_connection():
     )
 
 # Login Route
+# @app.route("/api/login", methods=["POST"])
+# def login():
+#     data = request.json
+#     email = data.get("email")
+#     password = data.get("password")
+
+#     if not email or not password:
+#         return jsonify({"error": "Email and password are required"}), 400
+
+#     # Query the database for the user
+#     conn = get_db_connection()
+#     cursor = conn.cursor(dictionary=True)
+
+#     cursor.execute("SELECT password_hash FROM Users WHERE email = %s", (email,))
+#     user_data = cursor.fetchone()
+
+#     cursor.close()
+#     conn.close()
+
+#     if not user_data:
+#         return jsonify({"error": "Invalid email or password"}), 401
+
+#     stored_hash = user_data["password_hash"]
+
+#     # Verify the password using bcrypt
+#     if bcrypt.checkpw(password.encode('utf-8'), stored_hash.encode('utf-8')):
+#         return jsonify({"message": "Login successful", "user": email}), 200
+#     else:
+#         return jsonify({"error": "Invalid email or password"}), 401
+
+
+# Signup Route
+# @app.route("/api/signup", methods=["POST"])
+# def signup():
+#     data = request.json
+#     email = data.get("email")
+#     password = data.get("password")
+
+#     if not email or not password:
+#         return jsonify({"error": "Email and password are required"}), 400
+
+#     # Hash the password
+#     hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+
+#     # Insert into the database
+#     conn = get_db_connection()
+#     cursor = conn.cursor()
+
+#     try:
+#         cursor.execute("INSERT INTO Users (email, password_hash) VALUES (%s, %s)", (email, hashed_password))
+#         conn.commit()
+#         return jsonify({"message": "Signup successful"}), 201
+#     except mysql.connector.Error as err:
+#         return jsonify({"error": "User already exists or database error"}), 400
+#     finally:
+#         cursor.close()
+#         conn.close()
 @app.route("/api/login", methods=["POST"])
 def login():
     data = request.json
@@ -25,29 +82,14 @@ def login():
     if not email or not password:
         return jsonify({"error": "Email and password are required"}), 400
 
-    # Query the database for the user
-    conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
+    # Hardcoded credentials
+    hardcoded_email = "benfeeney58@gmail.com"
+    hardcoded_password = "password"
 
-    cursor.execute("SELECT password_hash FROM Users WHERE email = %s", (email,))
-    user_data = cursor.fetchone()
-
-    cursor.close()
-    conn.close()
-
-    if not user_data:
-        return jsonify({"error": "Invalid email or password"}), 401
-
-    stored_hash = user_data["password_hash"]
-
-    # Verify the password using bcrypt
-    if bcrypt.checkpw(password.encode('utf-8'), stored_hash.encode('utf-8')):
-        return jsonify({"message": "Login successful", "user": email}), 200
+    if email == hardcoded_email and password == hardcoded_password:
+        return jsonify({"message": "Login successful"}), 201
     else:
-        return jsonify({"error": "Invalid email or password"}), 401
-
-
-# Signup Route
+        return jsonify({"error": "Invalid email or password"}), 400
 @app.route("/api/signup", methods=["POST"])
 def signup():
     data = request.json
@@ -57,22 +99,14 @@ def signup():
     if not email or not password:
         return jsonify({"error": "Email and password are required"}), 400
 
-    # Hash the password
-    hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+    # Hardcoded credentials
+    hardcoded_email = "benfeeney58@gmail.com"
+    hardcoded_password = "password"
 
-    # Insert into the database
-    conn = get_db_connection()
-    cursor = conn.cursor()
-
-    try:
-        cursor.execute("INSERT INTO Users (email, password_hash) VALUES (%s, %s)", (email, hashed_password))
-        conn.commit()
+    if email == hardcoded_email and password == hardcoded_password:
         return jsonify({"message": "Signup successful"}), 201
-    except mysql.connector.Error as err:
-        return jsonify({"error": "User already exists or database error"}), 400
-    finally:
-        cursor.close()
-        conn.close()
+    else:
+        return jsonify({"error": "Invalid email or password"}), 400
 
 if __name__ == "__main__":
     app.run(debug=True)

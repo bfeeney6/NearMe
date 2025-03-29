@@ -95,6 +95,11 @@ function SearchFriendsSection() {
     }, 1000);
   };
 
+  const handleSendRequest = (profileId) => {
+    // Logic for sending a friend request goes here
+    alert(`Friend request sent to profile with ID: ${profileId}`);
+  };
+
   return (
     <div>
       <h2 className="text-xl font-semibold mb-4 text-[var(--color-gray-700)]">
@@ -117,9 +122,17 @@ function SearchFriendsSection() {
             <p className="font-semibold">{profile.name}</p>
             <p className="text-sm text-gray-600">Location: {profile.location}</p>
             <p className="text-sm text-gray-600">Interest: {profile.interest}</p>
+            
+            <button
+              onClick={() => handleSendRequest(profile.id)}
+              className="mt-2 px-4 py-2 bg-[var(--color-black)] text-[var(--color-white)] rounded transition duration-200 hover:bg-gray-800"
+            >
+              Send Friend Request
+            </button>
           </div>
         ))}
       </div>
     </div>
   );
 }
+
