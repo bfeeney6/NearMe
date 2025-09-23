@@ -28,7 +28,7 @@ Currently, this project is in an early design phase, with limited functionality,
 Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/NearMe
+git clone https://github.com/bfeeney6/NearMe
 cd NearMe
 ```
 
@@ -44,7 +44,7 @@ pip install -r requirements.txt
 Run the Flask server:
 
 ```bash
-python app.py
+python callingfrontend.py
 ```
 
 #### Frontend (React)
@@ -59,7 +59,7 @@ npm install
 Start the development server:
 
 ```bash
-npm start
+npm run dev
 ```
 
 ⚡ **Usage**
