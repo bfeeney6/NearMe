@@ -34,16 +34,10 @@ cd NearMe
 
 #### Backend (Python Flask)
 
-Install dependencies:
-
-```bash
-cd backend
-pip install -r requirements.txt
-```
-
 Run the Flask server:
 
 ```bash
+cd backend
 python callingfrontend.py
 ```
 
